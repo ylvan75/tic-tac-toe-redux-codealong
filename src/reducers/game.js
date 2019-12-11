@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+/* eslint-disable no-case-declarations */
 import { calculateWinner } from 'utils/calculateWinner'
 
 const newGame = {
@@ -11,33 +11,44 @@ const newGame = {
   player: 'x'
 }
 
-export const game = createSlice({
-  name: 'game',
-  initialState: newGame,
-  reducers: {
-    captureSquare: (state, action) => {
-      const { index } = action.payload
+const CAPTURE_SQUARE = 'CAPTURE_SQUARE'
+const RESTART = 'RESTART'
 
-      // If the square is 'uncaptured', capture it
-      if (state.squares[index] === null) {
-        state.squares[index] = state.player
-      }
-
-      // Change the player to the next player
-      if (state.player === 'x') {
-        state.player = 'o'
-      } else {
-        state.player = 'x'
-      }
-
-      // If a winner hasn't already been declared, then check
-      // who the winner is
-      if (!state.winner) {
-        state.winner = calculateWinner(state.squares)
-      }
-    },
-    restart: () => {
-      return newGame
-    }
+export const captureSquare = (payload) => {
+  return {
+    type: CAPTURE_SQUARE,
+    payload
   }
-})
+}
+
+export const restart = () => {
+  return {
+    type: RESTART
+  }
+}
+
+export const reducer = (state = newGame, action) => {
+  switch (action.type) {
+    case CAPTURE_SQUARE:
+      const newSquares = state.squares.map((square, index) => {
+        if (index === action.payload.index) {
+          return state.player
+        }
+
+        return square
+      })
+
+      return {
+        ...state,
+        squares: newSquares,
+        player: state.player === 'x' ? 'o' : 'x',
+        winner: state.winner || calculateWinner(newSquares)
+      }
+
+    case RESTART:
+      return newGame
+
+    default:
+      return state
+  }
+}

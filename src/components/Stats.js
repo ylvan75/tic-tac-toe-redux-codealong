@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Player } from 'components/Player'
-import { game } from 'reducers/game'
+import { restart } from 'reducers/game'
 
 export const Stats = () => {
   const nextPlayer = useSelector((state) => state.game.player)
@@ -9,7 +9,7 @@ export const Stats = () => {
   const dispatch = useDispatch()
 
   const handleButtonPress = () => {
-    dispatch(game.actions.restart())
+    dispatch(restart())
   }
 
   if (winner) {

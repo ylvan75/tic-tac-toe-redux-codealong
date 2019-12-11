@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { game } from 'reducers/game'
+import { captureSquare } from 'reducers/game'
 import { Player } from 'components/Player'
 
 export const Square = ({ value, index }) => {
@@ -8,7 +8,7 @@ export const Square = ({ value, index }) => {
 
   const handleClick = () => {
     if (value === null) {
-      dispatch(game.actions.captureSquare({ index }))
+      dispatch(captureSquare({ index }))
     }
   }
 
